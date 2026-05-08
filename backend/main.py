@@ -14,7 +14,7 @@ app = FastAPI()
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["https://policy-scan-dashboard-h8x5w3xwb-prem-prakashs-projects-b93d62b4.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
