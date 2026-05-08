@@ -1,0 +1,78 @@
+{
+  "rules": [
+    {
+      "id": "ANSIBLE_SHELL_USAGE",
+      "description": "Avoid shell running risky commands",
+      "pattern": "shell:.*\\b(curl|wget|chmod|chown|rm)\\b",
+      "severity": "WARNING"
+    },
+    {
+      "id": "ANSIBLE_HARDCODED_SECRET",
+      "description": "Hardcoded secret detected in Ansible code",
+      "pattern": "(?i)\\b(password|passwd|secret|token|api[_-]?key|ansible_ssh_pass)\\b\\s*:\\s*[^\\s#]+",
+      "ignore_pattern": "(\\{\\{|!vault|lookup\\(|awx_injected)",
+      "severity": "HIGH"
+    },
+    {
+      "id": "ANSIBLE_FILE_MODE_0777",
+      "description": "World-writable file (mode 0777) is insecure",
+      "pattern": "mode: '0777'",
+      "severity": "HIGH"
+    },
+    {
+      "id": "ANSIBLE_SSH_ROOT_LOGIN_ENABLED",
+      "description": "Root SSH login should be disabled (PermitRootLogin yes)",
+      "pattern": "PermitRootLogin yes",
+      "severity": "HIGH"
+    },
+    {
+      "id": "ANSIBLE_SSH_PASSWORD_AUTH_ENABLED",
+      "description": "SSH password authentication should be disabled",
+      "pattern": "PasswordAuthentication yes",
+      "severity": "HIGH"
+    },
+    {
+      "id": "ANSIBLE_SHELL_INJECTION_RISK",
+      "description": "Potential command injection via variable in shell module",
+      "pattern": "shell:",
+      "contains": "{{",
+      "severity": "LOW"
+    },
+    {
+      "id": "ANSIBLE_SUDOERS_NOPASSWD",
+      "description": "Dangerous sudoers configuration (NOPASSWD:ALL)",
+      "pattern": "NOPASSWD:ALL",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "ANSIBLE_DOCKER_PRIVILEGED",
+      "description": "Docker container running in privileged mode",
+      "pattern": "privileged: yes",
+      "severity": "HIGH"
+    },
+    {
+      "id": "ANSIBLE_DOCKER_HOST_NETWORK",
+      "description": "Docker container using host network",
+      "pattern": "network_mode: host",
+      "severity": "LOW"
+    },
+    {
+      "id": "ANSIBLE_DOCKER_HOST_MOUNT",
+      "description": "Docker container mounting host root filesystem",
+      "pattern": "/:/host",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "ANSIBLE_PACKAGE_LATEST",
+      "description": "Package installed with state=latest (no version control)",
+      "pattern": "state: latest",
+      "severity": "MEDIUM"
+    },
+    {
+      "id": "ANSIBLE_COPY_MODE_PRESERVE",
+      "description": "mode=preserve is insecure in common high-risk scenarios",
+      "pattern": "mode:\\s*preserve[\\s\\S]*?(dest:\\s*/(etc|bin|sbin|usr/bin)|src:\\s*\\{\\{|\\.sh\\b)",
+      "severity": "MEDIUM"
+    }
+  ]
+}

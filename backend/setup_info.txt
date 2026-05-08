@@ -1,0 +1,99 @@
+=========================================
+SecureScan Backend Setup Guide
+=========================================
+
+This file contains the required steps to manually verify and set up the backend environment before running the application.
+
+-------------------------------------------------
+1. Navigate to backend directory
+-------------------------------------------------
+cd /home/ansible/security-dashboard/backend
+
+-------------------------------------------------
+2. Verify JFrog pip configuration
+-------------------------------------------------
+Check file exists:
+    ~/.pip/pip.conf
+
+Required content:
+    Must contain "global index-url" pointing to JFrog repository
+
+Validation command:
+    cat ~/.pip/pip.conf
+
+If missing or incorrect, contact DevOps team to configure JFrog access.
+
+-------------------------------------------------
+3. Verify virtual environment
+-------------------------------------------------
+Check:
+    backend/venv/ exists
+
+If not present:
+    python3 -m venv venv
+
+Activate manually:
+    source venv/bin/activate
+
+-------------------------------------------------
+4. Verify Python dependencies
+-------------------------------------------------
+Check installed packages:
+    pip list
+
+Required libraries:
+    - fastapi
+    - uvicorn
+    - requests
+    - pyyaml
+    - python-multipart
+
+If missing:
+    pip install -r requirements.txt
+
+-------------------------------------------------
+5. Verify requirements.txt
+-------------------------------------------------
+Ensure file exists:
+    requirements.txt
+
+Expected minimal content:
+    fastapi
+    uvicorn[standard]
+    requests
+    pyyaml
+    python-multipart
+
+-------------------------------------------------
+6. Verify Ollama connectivity
+-------------------------------------------------
+Check service:
+    curl http://192.168.1.172:11434
+
+Expected response:
+    "Ollama is running"
+
+If not working:
+    Ensure Ollama is running with:
+    OLLAMA_HOST=0.0.0.0:11434 ollama serve
+
+-------------------------------------------------
+7. Start backend server
+-------------------------------------------------
+Run backend:
+    uvicorn main:app --reload
+
+OR recommended:
+    venv/bin/python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+-------------------------------------------------
+IMPORTANT NOTES
+-------------------------------------------------
+
+- This is a manual setup checklist (NOT an automated script)
+- All steps must be verified before running the application
+- Future improvement: convert this into systemd or Ansible automation
+
+=========================================
+END OF SETUP GUIDE
+=========================================

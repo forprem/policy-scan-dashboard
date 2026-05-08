@@ -1,0 +1,148 @@
+=========================================
+Policy Scanner Frontend Setup Guide
+=========================================
+
+This document contains required frontend setup and verification steps.
+
+-------------------------------------------------
+1. Create frontend project (first time only)
+-------------------------------------------------
+
+Command:
+    npm create vite@latest frontend
+
+Select:
+    Framework -> React
+
+-------------------------------------------------
+2. Navigate to frontend directory
+-------------------------------------------------
+
+Windows:
+    cd C:\Users\security-dashboard\frontend
+
+Linux/macOS:
+    cd frontend
+
+-------------------------------------------------
+3. Verify Node.js installation
+-------------------------------------------------
+
+Command:
+    node -v
+
+Expected:
+    Node.js v16+ or higher
+
+Download:
+    https://nodejs.org
+
+-------------------------------------------------
+4. Verify npm installation
+-------------------------------------------------
+
+Command:
+    npm -v
+
+-------------------------------------------------
+5. Verify npm registry
+-------------------------------------------------
+
+Command:
+    npm config get registry
+
+Expected:
+    Should point to correct registry
+    (npmjs or corporate JFrog)
+
+-------------------------------------------------
+6. Disable npm strict SSL
+-------------------------------------------------
+
+Command:
+    npm config set strict-ssl false
+
+NOTE:
+Used in corporate/JFrog/proxy environments.
+
+-------------------------------------------------
+7. Install frontend dependencies
+-------------------------------------------------
+
+Install project dependencies:
+    npm install
+
+Install axios:
+    npm install axios
+
+    Libraries: chart.js, react-chartjs-2
+
+.npmrc file in frontend
+.npmrc file created with JFrog token 
+email = abc@abc.com
+always-auth = true
+registry=https://artifactobcryrr.go.abc.com/artifactory/api/npm/npm_virtual/
+//artifactoryrr.go.abc.com/artifactory/api/npm/npm_virtual/:_authToken=<Token>
+
+-------------------------------------------------
+8. Start Ollama (IMPORTANT)
+-------------------------------------------------
+
+Open NEW PowerShell window.
+
+Run:
+
+    $env:OLLAMA_HOST="0.0.0.0:11434"
+
+Then:
+
+    ollama serve
+
+Expected:
+    Ollama should listen on:
+    http://192.168.1.172:11434
+
+Verify:
+    Open browser:
+    http://192.168.1.172:11434
+
+Expected response:
+    Ollama is running
+
+-------------------------------------------------
+9. Start frontend application
+-------------------------------------------------
+
+Command:
+    npm run dev
+
+Expected:
+    Frontend starts on:
+    http://localhost:5173
+
+-------------------------------------------------
+10. Backend dependency
+-------------------------------------------------
+
+Ensure backend is already running:
+    http://localhost:8000
+
+Frontend requires backend APIs for:
+- Website scan
+- Repository scan
+- AI explain feature
+
+-------------------------------------------------
+IMPORTANT NOTES
+-------------------------------------------------
+
+- Ollama must be running before AI Explain works
+- Backend must be running before frontend testing
+- If UI becomes blank:
+    Check browser console using F12
+- If npm install fails:
+    Verify registry and strict-ssl settings
+
+=========================================
+END OF FRONTEND SETUP GUIDE
+=========================================
