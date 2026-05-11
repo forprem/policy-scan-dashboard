@@ -4,6 +4,7 @@ export default function ScanForm({ onScanSite, onScanRepo }) {
   const [url, setUrl] = useState("");
   const [repo, setRepo] = useState("");
   const [pat, setPat] = useState("");
+  const isAzureRepo = repo.includes("dev.azure.com");
 
   return (
     <div style={styles.container}>
@@ -42,13 +43,14 @@ export default function ScanForm({ onScanSite, onScanRepo }) {
           style={styles.input}
         />
 
-        <input
-          type="password"
-          value={pat}
-          onChange={(e) => setPat(e.target.value)}
-          placeholder="Personal Access Token (PAT)"
-          style={styles.input}
-        />
+        {isAzureRepo && (
+          <input
+            type="password"
+            value={pat}
+            onChange={(e) => setPat(e.target.value)}
+            placeholder="Azure DevOps PAT"
+          />
+        )}
 
         <button
           style={styles.secondaryButton}
