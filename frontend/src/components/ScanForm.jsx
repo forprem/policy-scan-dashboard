@@ -34,7 +34,7 @@ export default function ScanForm({ onScanSite, onScanRepo }) {
       {/* 📦 REPO SCAN CARD */}
       {/* ===================== */}
       <div style={styles.card}>
-        <h3 style={styles.title}>📦 Azure DevOps Repo Scan</h3>
+        <h3 style={styles.title}>📦 Repository Scan</h3>
 
         <input
           value={repo}
