@@ -1,0 +1,166 @@
+{
+  "rules": [
+    {
+      "id": "PYTHON_SUBPROCESS_SHELL_TRUE",
+      "description": "subprocess with shell=True detected",
+      "pattern": "subprocess\\.(run|Popen)\\(.*shell\\s*=\\s*True",
+      "severity": "HIGH"
+    },
+    {
+      "id": "PYTHON_HARDCODED_PASSWORD",
+      "description": "Hardcoded password detected",
+      "pattern": "(?i)(password|passwd|secret)\\s*=\\s*[\"\\'][^\"\\']+[\"\\']",
+      "severity": "HIGH"
+    },
+    {
+      "id": "PYTHON_OS_SYSTEM_USAGE",
+      "description": "os.system usage detected",
+      "pattern": "os\\.system\\(",
+      "severity": "HIGH"
+    },
+    {
+      "id": "PYTHON_EVAL_USAGE",
+      "description": "Use of eval() detected",
+      "pattern": "\\beval\\(",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "PYTHON_EXEC_USAGE",
+      "description": "Use of exec() detected",
+      "pattern": "\\bexec\\(",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "PYTHON_PICKLE_LOADS",
+      "description": "Unsafe pickle deserialization detected",
+      "pattern": "pickle\\.(load|loads)\\(",
+      "severity": "HIGH"
+    },
+    {
+      "id": "PYTHON_YAML_UNSAFE_LOAD",
+      "description": "Unsafe yaml.load detected",
+      "pattern": "yaml\\.load\\(",
+      "severity": "HIGH"
+    },
+    {
+      "id": "PYTHON_HARDCODED_API_KEY",
+      "description": "Hardcoded API key detected",
+      "pattern": "(?i)(api[_-]?key|token|access[_-]?token)\\s*=\\s*[\"\\'][^\"\\']+[\"\\']",
+      "severity": "HIGH"
+    },
+    {
+      "id": "PYTHON_MD5_USAGE",
+      "description": "Weak MD5 hashing detected",
+      "pattern": "hashlib\\.md5\\(",
+      "severity": "MEDIUM"
+    },
+    {
+      "id": "PYTHON_SHA1_USAGE",
+      "description": "Weak SHA1 hashing detected",
+      "pattern": "hashlib\\.sha1\\(",
+      "severity": "MEDIUM"
+    },
+    {
+      "id": "PYTHON_RANDOM_USAGE",
+      "description": "random module used for security-sensitive operations",
+      "pattern": "\\brandom\\.(random|randint|choice|choices)\\(",
+      "severity": "LOW"
+    },
+    {
+      "id": "PYTHON_REQUESTS_VERIFY_FALSE",
+      "description": "SSL verification disabled in requests",
+      "pattern": "requests\\.(get|post|put|delete|request)\\(.*verify\\s*=\\s*False",
+      "severity": "HIGH"
+    },
+    {
+      "id": "PYTHON_FLASK_DEBUG",
+      "description": "Flask app running in debug mode",
+      "pattern": "app\\.run\\(.*debug\\s*=\\s*True",
+      "severity": "MEDIUM"
+    },
+    {
+      "id": "PYTHON_BIND_ALL_INTERFACES",
+      "description": "Application binding to all interfaces",
+      "pattern": "host\\s*=\\s*[\"\\']0\\.0\\.0\\.0[\"\\']",
+      "severity": "LOW"
+    },
+    {
+      "id": "PYTHON_SQL_INJECTION",
+      "description": "Potential SQL injection via string concatenation",
+      "pattern": "(SELECT|INSERT|UPDATE|DELETE).*(\\+|%s|format\\()",
+      "severity": "HIGH"
+    },
+    {
+      "id": "PYTHON_OPEN_WORLD_WRITABLE",
+      "description": "World writable permissions detected",
+      "pattern": "chmod\\(.*0o777",
+      "severity": "HIGH"
+    },
+    {
+      "id": "PYTHON_XML_ETREE",
+      "description": "Potential insecure XML parsing",
+      "pattern": "xml\\.etree\\.ElementTree",
+      "severity": "MEDIUM"
+    },
+    {
+      "id": "PYTHON_JWT_VERIFY_FALSE",
+      "description": "JWT signature verification disabled",
+      "pattern": "jwt\\.decode\\(.*verify\\s*=\\s*False",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "PYTHON_FTP_USAGE",
+      "description": "FTP protocol usage detected",
+      "pattern": "ftplib\\.",
+      "severity": "MEDIUM"
+    },
+    {
+      "id": "PYTHON_TELNET_USAGE",
+      "description": "Telnet usage detected",
+      "pattern": "telnetlib\\.",
+      "severity": "HIGH"
+    },
+    {
+      "id": "PYTHON_REQUEST_HTTP",
+      "description": "HTTP URL detected instead of HTTPS",
+      "pattern": "http://",
+      "severity": "LOW"
+    },
+    {
+      "id": "PYTHON_BASE64_SECRET",
+      "description": "Base64 encoded secret-like string detected",
+      "pattern": "[A-Za-z0-9+/]{40,}={0,2}",
+      "severity": "LOW"
+    },
+    {
+      "id": "PYTHON_DANGEROUS_OS_REMOVE",
+      "description": "Potentially dangerous file deletion detected",
+      "pattern": "os\\.(remove|unlink|rmdir)\\(",
+      "severity": "MEDIUM"
+    },
+    {
+      "id": "PYTHON_PARAMIKO_AUTOADD",
+      "description": "Paramiko AutoAddPolicy disables host verification",
+      "pattern": "AutoAddPolicy\\(",
+      "severity": "HIGH"
+    },
+    {
+      "id": "PYTHON_INSECURE_CORS",
+      "description": "CORS allows all origins",
+      "pattern": "allow_origins\\s*=\\s*\\[\\s*[\"\\']\\*[\"\\']\\s*\\]",
+      "severity": "MEDIUM"
+    },
+    {
+      "id": "PYTHON_HARDCODED_IP",
+      "description": "Hardcoded IP address detected",
+      "pattern": "\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b",
+      "severity": "LOW"
+    },
+    {
+      "id": "PYTHON_PRIVATE_KEY",
+      "description": "Private key material detected",
+      "pattern": "BEGIN (RSA|DSA|EC|OPENSSH) PRIVATE KEY",
+      "severity": "CRITICAL"
+    }
+  ]
+}
