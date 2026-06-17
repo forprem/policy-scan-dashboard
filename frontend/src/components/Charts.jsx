@@ -19,6 +19,7 @@ ChartJS.register(
 );
 
 export default function Charts({ findings }) {
+
   const counts = { HIGH: 0, MEDIUM: 0, LOW: 0 };
 
   findings.forEach(f => {

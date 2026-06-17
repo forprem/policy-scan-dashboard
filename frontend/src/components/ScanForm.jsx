@@ -1,10 +1,14 @@
 import { useState } from "react";
 
+
 export default function ScanForm({ onScanSite, onScanRepo }) {
   const [url, setUrl] = useState("");
   const [repo, setRepo] = useState("");
   const [pat, setPat] = useState("");
-  const isAzureRepo = repo.includes("dev.azure.com");
+  const normalizedRepo = repo.toLowerCase();
+  const isAzureRepo =
+    normalizedRepo.includes("dev.azure.com") ||
+    normalizedRepo.includes("visualstudio.com");
 
   return (
     <div style={styles.container}>
@@ -18,7 +22,7 @@ export default function ScanForm({ onScanSite, onScanRepo }) {
         <input
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          placeholder="https://example.com"
+          placeholder="https://www.google.com"
           style={styles.input}
         />
 
@@ -49,6 +53,7 @@ export default function ScanForm({ onScanSite, onScanRepo }) {
             value={pat}
             onChange={(e) => setPat(e.target.value)}
             placeholder="Azure DevOps PAT"
+            style={styles.input}
           />
         )}
 

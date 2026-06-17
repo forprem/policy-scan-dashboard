@@ -2,9 +2,21 @@ import { useState } from "react";
 import Charts from "./Charts";
 import TreeNode, { buildTree } from "./TreeView";
 import DiffView from "./DiffView";
+import { downloadScanPdf } from "../utils/pdfReport";
 
 export default function Results({ data }) {
   const [selectedIssues, setSelectedIssues] = useState([]);
+
+  const downloadButtonStyle = {
+    marginTop: "10px",
+    marginBottom: "12px",
+    padding: "9px 14px",
+    borderRadius: "8px",
+    border: "1px solid #14532d",
+    background: "linear-gradient(180deg, #22c55e 0%, #15803d 100%)",
+    color: "#fff",
+    fontWeight: "600",
+  };
 
   if (!data) return null;
 
@@ -23,6 +35,9 @@ export default function Results({ data }) {
     return (
       <div style={{ marginTop: "30px" }}>
         <h2>Website Security Dashboard</h2>
+        <button style={downloadButtonStyle} onClick={() => downloadScanPdf(data)}>
+          Download PDF Report
+        </button>
 
         {/* 🔥 Risk Gauge */}
         <div
@@ -66,17 +81,25 @@ export default function Results({ data }) {
   // 📦 REPO SCAN
   // =========================
   if (data.findings && Array.isArray(data.findings)) {
+    const findingsCount = data.findings.length;
+    const apiTotalIssues = Number(data.total_issues);
+    const totalIssues = Number.isFinite(apiTotalIssues)
+      ? Math.max(apiTotalIssues, findingsCount)
+      : findingsCount;
     const tree = buildTree(data.findings);
 
     return (
       <div style={{ marginTop: "30px" }}>
         <h2>Repository Security Dashboard</h2>
+        <button style={downloadButtonStyle} onClick={() => downloadScanPdf(data)}>
+          Download PDF Report
+        </button>
         <p style={{
           fontSize: "18px",
           fontWeight: "bold",
           marginTop: "10px"
         }}>
-          Total Issues: {data.total_issues}
+          Total Issues: {totalIssues}
         </p>
         {/* 📊 Charts */}
         <Charts findings={data.findings} />

@@ -22,14 +22,28 @@ function App() {
   };
 
   const handleScanRepo = async (repo, pat) => {
+    const trimmedRepo = repo?.trim();
+    if (!trimmedRepo) {
+      alert("Please enter a repository URL");
+      return;
+    }
+
     setLoading(true);
     setData(null);
 
     try {
-      const res = await scanRepo(repo, pat);
-      setData(res.data);
-    } catch {
-      alert("Repo scan failed");
+      const res = await scanRepo(trimmedRepo, pat);
+      setData({
+        ...res.data,
+        repo_url: res?.data?.repo_url || trimmedRepo,
+      });
+    } catch (err) {
+      const message =
+        err?.response?.data?.detail ||
+        err?.response?.data?.error ||
+        err?.message ||
+        "Repo scan failed";
+      alert(`Repo scan failed: ${message}`);
     }
 
     setLoading(false);
