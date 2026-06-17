@@ -1,0 +1,106 @@
+{
+  "rules": [
+    {
+      "id": "JAVA_RUNTIME_EXEC",
+      "description": "Runtime command execution detected",
+      "pattern": "Runtime\\.getRuntime\\(\\)\\.exec\\(",
+      "severity": "HIGH"
+    },
+    {
+      "id": "JAVA_PROCESS_BUILDER",
+      "description": "ProcessBuilder usage detected",
+      "pattern": "new\\s+ProcessBuilder\\(",
+      "severity": "LOW"
+    },
+    {
+      "id": "JAVA_HARDCODED_SECRET",
+      "description": "Potential hardcoded secret detected",
+      "pattern": "(?i)(password|passwd|secret|token|api[_-]?key)\\s*=\\s*\\\"[^\\\"]+\\\"",
+      "ignore_pattern": [
+        "(?i)\\b(SERIALIZED_NAME_|JSON_FIELD_|FIELD_NAME_|PROPERTY_NAME_)\\w*\\s*=",
+        "(?i)\\b(password|passwd|secret|token|api[_-]?key)\\s*=\\s*\\\"(password|passwd|secret|token|api[_-]?key)\\\"",
+        "=\\s*\\\"[A-Fa-f0-9]{128,}\\\"",
+        "=\\s*\\\"[A-Za-z0-9+/=]{128,}\\\""
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "id": "JAVA_MD5_USAGE",
+      "description": "Weak MD5 hashing detected",
+      "pattern": "MessageDigest\\.getInstance\\(\\s*\\\"MD5\\\"\\s*\\)",
+      "severity": "LOW"
+    },
+    {
+      "id": "JAVA_SHA1_USAGE",
+      "description": "Weak SHA1 hashing detected",
+      "pattern": "MessageDigest\\.getInstance\\(\\s*\\\"SHA-?1\\\"\\s*\\)",
+      "severity": "LOW"
+    },
+    {
+      "id": "JAVA_SQL_INJECTION_CONCAT",
+      "description": "Potential SQL injection via string concatenation",
+      "pattern": "(?i)\\\"\\s*(SELECT\\s+.+\\s+FROM|INSERT\\s+INTO\\s+.+\\s+VALUES|UPDATE\\s+.+\\s+SET|DELETE\\s+FROM\\s+.+\\s+WHERE)\\b[\\s\\S]{0,300}(\\+|String\\.format\\()",
+      "severity": "HIGH"
+    },
+    {
+      "id": "JAVA_OBJECT_INPUT_STREAM",
+      "description": "Unsafe Java deserialization pattern detected",
+      "pattern": "new\\s+ObjectInputStream\\(",
+      "severity": "HIGH"
+    },
+    {
+      "id": "JAVA_HTTP_URL",
+      "description": "HTTP URL detected instead of HTTPS",
+      "pattern": "http://",
+      "severity": "LOW"
+    },
+    {
+      "id": "JAVA_PROCESS_START",
+      "description": "Process execution start detected",
+      "pattern": "\\.start\\s*\\(",
+      "severity": "LOW"
+    },
+    {
+      "id": "JAVA_JPA_QUERY_CONCAT",
+      "description": "Potential JPQL injection via query concatenation",
+      "pattern": "createQuery\\s*\\(\\s*\\\".*\\\"\\s*\\+",
+      "severity": "HIGH"
+    },
+    {
+      "id": "JAVA_DESERIALIZE_READ_OBJECT",
+      "description": "Unsafe deserialization via readObject detected",
+      "pattern": "\\.readObject\\s*\\(",
+      "severity": "HIGH"
+    },
+    {
+      "id": "JAVA_JACKSON_DEFAULT_TYPING",
+      "description": "Jackson default typing enabled",
+      "pattern": "enableDefaultTyping\\s*\\(",
+      "severity": "HIGH"
+    },
+    {
+      "id": "JAVA_TRUST_ALL_HOSTNAME",
+      "description": "TLS hostname verification disabled",
+      "pattern": "setHostnameVerifier\\s*\\(\\s*\\([^\\)]*\\)\\s*->\\s*true\\s*\\)",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "JAVA_TRUST_ALL_X509",
+      "description": "Trust manager may accept all server certificates",
+      "pattern": "checkServerTrusted\\s*\\([^\\)]*\\)\\s*\\{\\s*\\}",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "JAVA_SNAKEYAML_UNSAFE_LOAD",
+      "description": "Potential unsafe SnakeYAML load() usage",
+      "pattern": "new\\s+Yaml\\s*\\(\\s*\\)\\s*\\.load\\s*\\(",
+      "severity": "HIGH"
+    },
+    {
+      "id": "JAVA_SQL_PREPARESTATEMENT_CONCAT",
+      "description": "Potential SQL injection in prepareStatement concatenation",
+      "pattern": "prepareStatement\\s*\\(\\s*\\\".*\\\"\\s*\\+",
+      "severity": "HIGH"
+    }
+  ]
+}

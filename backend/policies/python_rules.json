@@ -10,24 +10,33 @@
       "id": "PYTHON_HARDCODED_PASSWORD",
       "description": "Hardcoded password detected",
       "pattern": "(?i)(password|passwd|secret)\\s*=\\s*[\"\\'][^\"\\']+[\"\\']",
+      "ignore_pattern": [
+        "(?i)(password|passwd|secret)\\s*=\\s*[\"']\\s*[\"']",
+        "(?i)(password|passwd|secret)\\s*=\\s*[\"']<[^>]*>[\"']",
+        "(?i)(password|passwd|secret)\\s*=\\s*[\"']\\$\\{[^}]+\\}[\"']",
+        "(?i)(password|passwd|secret)\\s*=\\s*[\"'](your[_-]?(password|passwd|secret)|replace[_-]?me|changeme|dummy|example|test)[\"']"
+      ],
       "severity": "HIGH"
     },
     {
       "id": "PYTHON_OS_SYSTEM_USAGE",
       "description": "os.system usage detected",
       "pattern": "os\\.system\\(",
+      "ignore_pattern": [
+        "os\\.system\\(\\s*['\\\"][^'\\\"]+['\\\"]\\s*\\)"
+      ],
       "severity": "HIGH"
     },
     {
       "id": "PYTHON_EVAL_USAGE",
       "description": "Use of eval() detected",
-      "pattern": "\\beval\\(",
+      "pattern": "(^|[^.\\w])eval\\(",
       "severity": "CRITICAL"
     },
     {
       "id": "PYTHON_EXEC_USAGE",
       "description": "Use of exec() detected",
-      "pattern": "\\bexec\\(",
+      "pattern": "(^|[^.\\w])exec\\(",
       "severity": "CRITICAL"
     },
     {
@@ -46,6 +55,12 @@
       "id": "PYTHON_HARDCODED_API_KEY",
       "description": "Hardcoded API key detected",
       "pattern": "(?i)(api[_-]?key|token|access[_-]?token)\\s*=\\s*[\"\\'][^\"\\']+[\"\\']",
+      "ignore_pattern": [
+        "(?i)(api[_-]?key|token|access[_-]?token)\\s*=\\s*[\"']\\s*[\"']",
+        "(?i)(api[_-]?key|token|access[_-]?token)\\s*=\\s*[\"']<[^>]*>[\"']",
+        "(?i)(api[_-]?key|token|access[_-]?token)\\s*=\\s*[\"']\\$\\{[^}]+\\}[\"']",
+        "(?i)(api[_-]?key|token|access[_-]?token)\\s*=\\s*[\"'](your[_-]?(api[_-]?key|token)|replace[_-]?me|changeme|dummy|example|test)[\"']"
+      ],
       "severity": "HIGH"
     },
     {
@@ -63,8 +78,10 @@
     {
       "id": "PYTHON_RANDOM_USAGE",
       "description": "random module used for security-sensitive operations",
+      "contains": ["token", "password", "secret", "key", "auth", "session", "otp"],
       "pattern": "\\brandom\\.(random|randint|choice|choices)\\(",
-      "severity": "LOW"
+      "ignore_pattern": ["random\\.randint\\(\\s*\\d+\\s*,\\s*\\d+\\s*\\)"],
+      "severity": "HIGH"
     },
     {
       "id": "PYTHON_REQUESTS_VERIFY_FALSE",
@@ -98,8 +115,8 @@
     },
     {
       "id": "PYTHON_XML_ETREE",
-      "description": "Potential insecure XML parsing",
-      "pattern": "xml\\.etree\\.ElementTree",
+      "description": "Potential insecure XML parsing with non-literal input",
+      "pattern": "(?:\\bET\\b|\\betree\\b|\\bElementTree\\b|xml\\.etree\\.ElementTree)\\.(parse|fromstring)\\s*\\(",
       "severity": "MEDIUM"
     },
     {
@@ -123,20 +140,24 @@
     {
       "id": "PYTHON_REQUEST_HTTP",
       "description": "HTTP URL detected instead of HTTPS",
+      "contains": ["requests.get", "requests.post", "requests.put", "requests.delete", "urllib.request"],
       "pattern": "http://",
+      "ignore_pattern": ["http://localhost", "http://127.0.0.1", "http://0.0.0.0"],
       "severity": "LOW"
     },
     {
       "id": "PYTHON_BASE64_SECRET",
       "description": "Base64 encoded secret-like string detected",
       "pattern": "[A-Za-z0-9+/]{40,}={0,2}",
+      "contains": ["secret", "token", "key", "password", "passwd", "auth"],
+      "ignore_pattern": ["https?://", "[?&][A-Za-z0-9_%-]+="] ,
       "severity": "LOW"
     },
     {
       "id": "PYTHON_DANGEROUS_OS_REMOVE",
       "description": "Potentially dangerous file deletion detected",
       "pattern": "os\\.(remove|unlink|rmdir)\\(",
-      "severity": "MEDIUM"
+      "severity": "LOW"
     },
     {
       "id": "PYTHON_PARAMIKO_AUTOADD",

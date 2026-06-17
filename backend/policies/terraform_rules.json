@@ -1,0 +1,68 @@
+{
+  "rules": [
+    {
+      "id": "TF_AWS_SECURITY_GROUP_OPEN_INGRESS",
+      "description": "Security group ingress open to the world (0.0.0.0/0)",
+      "pattern": "cidr_blocks\\s*=\\s*\\[[^\\]]*\"0\\.0\\.0\\.0/0\"",
+      "severity": "HIGH"
+    },
+    {
+      "id": "TF_AWS_SECURITY_GROUP_OPEN_IPV6_INGRESS",
+      "description": "Security group ingress open to all IPv6 (::/0)",
+      "pattern": "ipv6_cidr_blocks\\s*=\\s*\\[[^\\]]*\"::/0\"",
+      "severity": "HIGH"
+    },
+    {
+      "id": "TF_PUBLIC_S3_BUCKET_ACL",
+      "description": "S3 bucket ACL allows public access",
+      "pattern": "acl\\s*=\\s*\"(public-read|public-read-write|website)\"",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "TF_S3_PUBLIC_POLICY",
+      "description": "S3 public access block flags disabled",
+      "pattern": "block_public_(acls|policy)\\s*=\\s*false|ignore_public_acls\\s*=\\s*false|restrict_public_buckets\\s*=\\s*false",
+      "severity": "HIGH"
+    },
+    {
+      "id": "TF_AWS_INSTANCE_PUBLIC_IP",
+      "description": "EC2 instance configured with public IP",
+      "pattern": "associate_public_ip_address\\s*=\\s*true",
+      "severity": "MEDIUM"
+    },
+    {
+      "id": "TF_AWS_EBS_UNENCRYPTED",
+      "description": "EBS volume encryption disabled",
+      "pattern": "encrypted\\s*=\\s*false",
+      "severity": "HIGH"
+    },
+    {
+      "id": "TF_AWS_RDS_STORAGE_UNENCRYPTED",
+      "description": "RDS storage encryption disabled",
+      "pattern": "storage_encrypted\\s*=\\s*false",
+      "severity": "HIGH"
+    },
+    {
+      "id": "TF_AWS_DB_SKIP_FINAL_SNAPSHOT",
+      "description": "Database final snapshot disabled",
+      "pattern": "skip_final_snapshot\\s*=\\s*true",
+      "severity": "MEDIUM"
+    },
+    {
+      "id": "TF_KMS_KEY_ROTATION_DISABLED",
+      "description": "KMS key rotation disabled",
+      "pattern": "enable_key_rotation\\s*=\\s*false",
+      "severity": "MEDIUM"
+    },
+    {
+      "id": "TF_HARDCODED_SECRET",
+      "description": "Potential hardcoded secret in Terraform",
+      "pattern": "(?i)(password|passwd|secret|token|api[_-]?key)\\s*=\\s*\"[^\"]+\"",
+      "ignore_pattern": [
+        "(?i)(password|passwd|secret|token|api[_-]?key)\\s*=\\s*\"\\$\\{[^}]+\\}\"",
+        "(?i)(password|passwd|secret|token|api[_-]?key)\\s*=\\s*\"<[^>]*>\""
+      ],
+      "severity": "HIGH"
+    }
+  ]
+}

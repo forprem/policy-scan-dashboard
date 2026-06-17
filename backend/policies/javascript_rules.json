@@ -1,0 +1,113 @@
+{
+  "rules": [
+    {
+      "id": "JS_EVAL_USAGE",
+      "description": "Use of eval() detected",
+      "pattern": "\\beval\\s*\\(",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "JS_FUNCTION_CONSTRUCTOR",
+      "description": "Dynamic Function constructor usage detected",
+      "pattern": "new\\s+Function\\s*\\(",
+      "severity": "HIGH"
+    },
+    {
+      "id": "JS_SET_TIMEOUT_STRING",
+      "description": "setTimeout called with string code",
+      "pattern": "setTimeout\\s*\\(\\s*['\"]",
+      "severity": "HIGH"
+    },
+    {
+      "id": "JS_SET_INTERVAL_STRING",
+      "description": "setInterval called with string code",
+      "pattern": "setInterval\\s*\\(\\s*['\"]",
+      "severity": "HIGH"
+    },
+    {
+      "id": "JS_INNERHTML_ASSIGN",
+      "description": "Potential unsafe innerHTML assignment",
+      "pattern": "\\.innerHTML\\s*=",
+      "severity": "MEDIUM"
+    },
+    {
+      "id": "JS_OUTERHTML_ASSIGN",
+      "description": "Potential unsafe outerHTML assignment",
+      "pattern": "\\.outerHTML\\s*=",
+      "severity": "MEDIUM"
+    },
+    {
+      "id": "JS_INSERT_ADJACENT_HTML",
+      "description": "Potential unsafe insertAdjacentHTML usage",
+      "pattern": "\\.insertAdjacentHTML\\s*\\(",
+      "severity": "MEDIUM"
+    },
+    {
+      "id": "JS_DOCUMENT_WRITE",
+      "description": "document.write usage detected",
+      "pattern": "document\\.write\\s*\\(",
+      "severity": "MEDIUM"
+    },
+    {
+      "id": "JS_HTTP_URL",
+      "description": "HTTP URL detected instead of HTTPS",
+      "pattern": "http://",
+      "severity": "LOW"
+    },
+    {
+      "id": "JS_WEAK_MD5_USAGE",
+      "description": "Weak MD5 hashing usage detected",
+      "pattern": "\\bmd5\\s*\\(",
+      "severity": "MEDIUM"
+    },
+    {
+      "id": "JS_INSECURE_RANDOM",
+      "description": "Math.random used in security-sensitive context",
+      "pattern": "Math\\.random\\s*\\(",
+      "contains": ["token", "password", "secret", "key", "auth", "session", "otp"],
+      "severity": "HIGH"
+    },
+    {
+      "id": "JS_NODE_CHILD_PROCESS_EXEC",
+      "description": "Node.js child_process exec usage detected",
+      "pattern": "child_process\\.(exec|execSync)\\s*\\(",
+      "severity": "HIGH"
+    },
+    {
+      "id": "JS_NODE_CHILD_PROCESS_SPAWN_SHELL",
+      "description": "child_process spawn with shell enabled",
+      "pattern": "child_process\\.(spawn|spawnSync)\\s*\\([^)]*shell\\s*:\\s*true",
+      "severity": "HIGH"
+    },
+    {
+      "id": "JS_VM_CODE_EXECUTION",
+      "description": "Node vm dynamic code execution detected",
+      "pattern": "\\bvm\\.(runInNewContext|runInContext|runInThisContext)\\s*\\(",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "JS_TLS_REJECT_UNAUTHORIZED_FALSE",
+      "description": "TLS certificate verification disabled",
+      "pattern": "rejectUnauthorized\\s*:\\s*false",
+      "severity": "HIGH"
+    },
+    {
+      "id": "JS_NODE_TLS_REJECT_UNAUTHORIZED_ENV",
+      "description": "NODE_TLS_REJECT_UNAUTHORIZED disabled",
+      "pattern": "NODE_TLS_REJECT_UNAUTHORIZED\\s*=\\s*['\"]?0['\"]?",
+      "severity": "CRITICAL"
+    },
+    {
+      "id": "JS_FS_CHMOD_777",
+      "description": "World-writable permissions (0777) detected",
+      "pattern": "\\bchmod\\s*\\([^)]*0o?777",
+      "severity": "HIGH"
+    },
+    {
+      "id": "JS_SQL_QUERY_CONCAT",
+      "description": "Potential SQL injection via query string concatenation",
+      "pattern": "(?i)(SELECT|INSERT|UPDATE|DELETE).*(\\+|\\$\\{)",
+      "severity": "HIGH"
+    }
+  ]
+}

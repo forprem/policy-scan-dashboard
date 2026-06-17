@@ -14,7 +14,7 @@ app = FastAPI()
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"^https://policy-scan-dashboard.*\.vercel\.app$",
+    allow_origins=["http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -61,8 +61,11 @@ def scan_repository(request: RepoScanRequest):
 @app.post("/explain")
 def explain(issue: dict):
 
-    explanation = explain_issue(issue)
+    result = explain_issue(issue)
+
+    if isinstance(result, dict) and "explanation" in result:
+        return result
 
     return {
-        "explanation": explanation
+        "explanation": result
     }
