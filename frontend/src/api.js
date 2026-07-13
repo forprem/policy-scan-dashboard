@@ -15,3 +15,6 @@ export const scanRepo = (repo, pat) =>
 
 export const explainIssue = (issue) =>
   API.post("/explain", issue);
+
+export const remediateIssue = (issue) =>
+  API.post("/remediate", issue);
