@@ -291,8 +291,14 @@ function buildWebsiteReport(data) {
   return state.doc;
 }
 
-function buildRepoReport(data) {
+function findRemediationForFinding(remediationByKey, finding, index) {
+  const key = `${finding?.file || ""}:${finding?.line_number || ""}:${finding?.rule || ""}:${index}`;
+  return remediationByKey[key] || null;
+}
+
+function buildRepoReport(data, options = {}) {
   const state = createDoc();
+  const { mode = "standard", remediationByKey = {} } = options;
 
   addHeader(state, "Policy Scanner - Repository Scan Report", getRepoUrl(data));
 
@@ -405,6 +411,12 @@ function buildRepoReport(data) {
 
   addSectionTitle(state, "Findings", [37, 99, 235]);
 
+  if (mode === "remediation") {
+    const totalFindings = findings.length;
+    const remediatedCount = Object.values(remediationByKey).filter((item) => item?.status !== "error").length;
+    addParagraph(state, `Remediation generated: ${remediatedCount}/${totalFindings}`);
+  }
+
   if (findings.length === 0) {
     addParagraph(state, "No repository findings detected.");
     return state.doc;
@@ -412,6 +424,10 @@ function buildRepoReport(data) {
 
   findings.forEach((finding, index) => {
     ensureSpace(state, 20);
+    const remediation =
+      mode === "remediation"
+        ? findRemediationForFinding(remediationByKey, finding, index)
+        : null;
 
     state.doc.setDrawColor(220, 220, 220);
     state.doc.setLineWidth(0.3);
@@ -465,20 +481,84 @@ function buildRepoReport(data) {
       state.doc.setFontSize(10);
     }
 
+    if (mode === "remediation" && remediation) {
+      ensureSpace(state, 12);
+      state.doc.setFont("helvetica", "bold");
+      state.doc.setFontSize(10);
+      state.doc.setTextColor(30, 64, 175);
+      state.doc.text("Remediation", LEFT_MARGIN, state.y);
+      state.y += 5;
+
+      state.doc.setTextColor(0, 0, 0);
+      state.doc.setFont("helvetica", "normal");
+      state.doc.setFontSize(10);
+      addParagraph(state, remediation.explanation || "No remediation explanation provided.");
+
+      if (Array.isArray(remediation.remediation_steps) && remediation.remediation_steps.length > 0) {
+        state.doc.setFont("helvetica", "bold");
+        state.doc.setFontSize(10);
+        state.doc.text("Steps", LEFT_MARGIN, state.y);
+        state.y += 4.5;
+        state.doc.setFont("helvetica", "normal");
+        remediation.remediation_steps.forEach((step) => addParagraph(state, step, { bullet: true }));
+      }
+
+      if (remediation.fixed_code) {
+        const bg = getSeverityCodeBgColor(severity);
+        state.doc.setFont("helvetica", "bold");
+        state.doc.setFontSize(10);
+        state.doc.text("Suggested Fix", LEFT_MARGIN, state.y);
+        state.y += 4.5;
+
+        state.doc.setFont("helvetica", "oblique");
+        state.doc.setFontSize(11);
+        const fixedCodeLines = state.doc.splitTextToSize(remediation.fixed_code, CONTENT_WIDTH - 4);
+        fixedCodeLines.forEach((line) => {
+          ensureSpace(state, 7);
+          state.doc.setFillColor(...bg);
+          state.doc.rect(LEFT_MARGIN + 2, state.y - 4.5, CONTENT_WIDTH - 4, 6, "F");
+          state.doc.setTextColor(20, 20, 20);
+          state.doc.text(line, LEFT_MARGIN + 4, state.y);
+          state.y += 6;
+        });
+        state.doc.setTextColor(0, 0, 0);
+        state.doc.setFont("helvetica", "normal");
+        state.doc.setFontSize(10);
+      }
+
+      if (remediation.status === "error" && remediation.error) {
+        state.doc.setTextColor(185, 28, 28);
+        addParagraph(state, `Remediation error: ${remediation.error}`);
+        state.doc.setTextColor(0, 0, 0);
+      }
+    }
+
     state.y += 3;
   });
 
   return state.doc;
 }
 
-export function downloadScanPdf(data) {
+export function downloadScanPdf(data, options = {}) {
   if (!data) return;
 
   const isWebsiteReport = data.risk_score !== undefined;
-  const doc = isWebsiteReport ? buildWebsiteReport(data) : buildRepoReport(data);
+  const remediationByKey = (options?.remediationResults || []).reduce((acc, item) => {
+    if (item?.key) acc[item.key] = item;
+    return acc;
+  }, {});
+
+  const doc = isWebsiteReport
+    ? buildWebsiteReport(data)
+    : buildRepoReport(data, {
+        mode: options?.mode || "standard",
+        remediationByKey,
+      });
   const fileName = isWebsiteReport
     ? `website-scan-report-${Date.now()}.pdf`
-    : `repo-scan-report-${Date.now()}.pdf`;
+    : options?.mode === "remediation"
+      ? `repo-remediation-report-${Date.now()}.pdf`
+      : `repo-scan-report-${Date.now()}.pdf`;
 
   doc.save(fileName);
 }
